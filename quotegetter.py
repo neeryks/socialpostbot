@@ -1,5 +1,6 @@
 import openai
 import mysql.connector
+import savedfile
 
 class Quote_Getter:
   def __init__(self):
@@ -7,7 +8,7 @@ class Quote_Getter:
 
   def get_quote(self,amount):
 
-    openai.api_key = "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"
+    openai.api_key = savedfile.openai_key()
     completion = openai.ChatCompletion.create(
       model="gpt-3.5-turbo-0613",
       messages=[
