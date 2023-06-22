@@ -25,6 +25,7 @@ class Quote_Getter:
 
 
 class Sql_Query(Quote_Getter):
+
   def __init__(self):
     self.mydb = mysql.connector.connect(
     host="localhost",
@@ -130,3 +131,6 @@ class Sql_Query(Quote_Getter):
     for result in myresult:
       print(result[0])
 
+get = Sql_Query()
+for i in range(1,11):
+  get.update_Used("No",i)
