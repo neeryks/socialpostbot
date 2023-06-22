@@ -5,7 +5,7 @@ from moviepy.editor import TextClip, CompositeVideoClip
 from moviepy.video.tools.subtitles import SubtitlesClip
 from quotegetter import Quote_Getter, Sql_Query
 
-class Video_Editor(Quote_Getter):
+class Video_Editor(Sql_Query):
     def __init__(self):
         pass
         
