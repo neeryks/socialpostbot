@@ -131,6 +131,8 @@ class Sql_Query(Quote_Getter):
     for result in myresult:
       print(result[0])
 
-get = Sql_Query()
-for i in range(1,11):
-  get.update_Used("No",i)
+
+if __name__ == "__main__":
+  use = Sql_Query()
+  for i in range(1,11):
+    use. update_Used("No",i)
