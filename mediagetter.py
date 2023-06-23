@@ -74,3 +74,4 @@ class downloader:
         print(cursor.rowcount, "record(s) deleted")
 
 
+

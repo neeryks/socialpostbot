@@ -17,7 +17,7 @@ class Video_Editor(Sql_Query):
         video_clip = VideoFileClip(f"{video_file}")
         width, height = video_clip.size
         if width > height:
-            video_clip = crop(video_clip, x_center=width/2, y_center=height/2, width = 480, height = height)
+            video_clip = crop(video_clip, x_center=width/2, y_center=height/2, width = 360, height = 640)
         else:
             video_clip = crop(video_clip, x_center=width/2, y_center=height/2, width = widthtobe, height = heighttobe)
         return video_clip
@@ -36,17 +36,18 @@ class Video_Editor(Sql_Query):
         video_clip = self.video_edit("video_demo.mp4",720,1280)
         quote_audio_text = self.using_quote()
         self.quote_audio(quote_audio_text)
-        audio_clip1 = self.audio_edit("epic.mp3").set_duration(video_clip.duration).volumex(0.5)
-        audio_clip2 = self.audio_edit("quote.mp3").volumex(1.0)
-        final_audio = CompositeAudioClip([audio_clip1, audio_clip2])
+        final_audio = self.audio_edit("quote.mp3").volumex(1.0)
         video_clip = video_clip.set_audio(final_audio)
-        final_video = CompositeVideoClip([video_clip, self.caption(quote_audio_text,50,"white",('center','center'),video_clip)])
+        if video_clip.size[0] == 480:
+            final_video = CompositeVideoClip([video_clip, self.caption(quote_audio_text,20,"yellow",('center','center'),video_clip)])
+        else:
+            final_video = CompositeVideoClip([video_clip, self.caption(quote_audio_text,50,"yellow",('center','center'),video_clip)])
         return final_video.write_videofile("final_video.mp4")
 
     def caption(self,caption,font,color,position,video_file):
-        captions = TextClip(f"{caption}", fontsize=font, color=f"{color}")
+        captions = TextClip(f"{caption}",method='caption',stroke_width= 4, fontsize=font, color=f"{color}", size=video_file.size)
         captions = captions.set_duration(video_file.duration)
-        captions = captions.set_position(position).margin(left=10,right=10, opacity=0)
+        captions = captions.set_position(position)
         return captions
     
     def quote_audio(self,quote):
