@@ -1,10 +1,10 @@
 import openai
 import mysql.connector
 import savedfile
-
+from function_list import function_list
 class Quote_Getter:
-  def __init__(self):
-    pass
+  def __init__(self,query):
+    self.query = query
 
   def get_quote(self,amount):
 
@@ -14,9 +14,37 @@ class Quote_Getter:
       messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": f"give me {amount} unique motivational quote"}]
+      
     )
     quotes = [self.splitter(x) for x in completion.choices[0].message["content"].split("\n") if x != ""]
     return quotes
+  
+  def query_ai(self):
+    openai.api_key = savedfile.openai_key()
+    completion = openai.ChatCompletion.create(
+      model="gpt-3.5-turbo-0613",
+      messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": f"{self.query}"},],
+      functions=function_list())
+
+    response = completion.choices[0].message
+    return response
+  
+  def query_sort(self):
+    response=self.query_ai()
+    try: 
+      functioncall = response["function_call"]["name"]
+      data = functioncall()
+      return data
+    except:
+      return response["content"]
+    
+  def answer_back(self):
+    data = self.query_sort()
+    data = str(data)
+    return data
+
 
   def splitter(self,quote):
     quote = quote.split('"')[1]
@@ -133,6 +161,5 @@ class Sql_Query(Quote_Getter):
 
 
 if __name__ == "__main__":
-  use = Sql_Query()
-  for i in range(1,11):
-    use. update_Used("No",i)
+  get = Quote_Getter()
+  get.query_ai("whats the height of effiel tower")
