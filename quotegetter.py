@@ -5,19 +5,6 @@ from function_list import function_list
 class Quote_Getter:
   def __init__(self,query):
     self.query = query
-
-  def get_quote(self,amount):
-
-    openai.api_key = savedfile.openai_key()
-    completion = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo-0613",
-      messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": f"give me {amount} unique motivational quote"}]
-      
-    )
-    quotes = [self.splitter(x) for x in completion.choices[0].message["content"].split("\n") if x != ""]
-    return quotes
   
   def query_ai(self):
     openai.api_key = savedfile.openai_key()
@@ -35,7 +22,10 @@ class Quote_Getter:
     response=self.query_ai()
     try: 
       functioncall = response["function_call"]["name"]
-      data = functioncall()
+      dict = {
+        "select_all_quotes": Sql_Query().select_all_quotes(),
+      }
+      data = dict[functioncall]
       return data
     except:
       return response["content"]
@@ -44,12 +34,6 @@ class Quote_Getter:
     data = self.query_sort()
     data = str(data)
     return data
-
-
-  def splitter(self,quote):
-    quote = quote.split('"')[1]
-    quote = quote.split('"')[0]
-    return quote
 
 
 class Sql_Query(Quote_Getter):
@@ -99,9 +83,8 @@ class Sql_Query(Quote_Getter):
     cursor = self.mydb.cursor()
     cursor.execute("SELECT * FROM quotes")
     myresult = cursor.fetchall()
-    for x in myresult:
-      print(x[0])
-    return myresult
+    quote_list = "\n".join(list(map(lambda x: x[0],myresult)))
+    return quote_list
   
   def select_quote_byid(self,id):
     cursor = self.mydb.cursor()
@@ -161,5 +144,5 @@ class Sql_Query(Quote_Getter):
 
 
 if __name__ == "__main__":
-  get = Quote_Getter()
-  get.query_ai("whats the height of effiel tower")
+  get = Quote_Getter("Show me all the quotes from the database")
+  get.answer_back()
