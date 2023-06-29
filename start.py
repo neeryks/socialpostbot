@@ -57,8 +57,7 @@ class Video_Editor(Sql_Query):
         speech_key = key()
         service_region = "centralindia"
         speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
-        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural "
-        speech_config.
+        speech_config.speech_synthesis_voice_name = "en-US-TonyNeural"
         text = tospeak
         speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
         result = speech_synthesizer.speak_text_async(text).get()
