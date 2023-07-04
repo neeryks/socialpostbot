@@ -34,7 +34,7 @@ def function_list():
         "type": "object",
         "properties": {
           "amount": {
-            "type": "integer",
+            "type": "string",
             "description": "the number of quotes that need to be inserted"
           }
         }

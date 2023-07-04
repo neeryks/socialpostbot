@@ -32,25 +32,22 @@ class Quote_Getter(Sql_Query,downloader):
       messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": f"{qu}"},],
-      functions=function_list())
+      )
 
     response = completion.choices[0].message
     return response
   
   def query_sort(self):
     response=self.query_ai()
-    print(response)
+    #print(response)
     try:
       regex_arguments = re.sub(r"\t|\n|\r", '', response["function_call"]["arguments"])
       regex_arguments = json.loads(regex_arguments)
       
       function_call = response["function_call"]
       function_name = function_call["name"]
-
-      dict_function = dictfun.dict_fun(function_name)
-
-      data = eval(dict_function)
-      print(data)
+      #print(regex_arguments)
+      data = eval(dictfun.dict_fun(function_name))
       return data
 
     except:
@@ -62,10 +59,12 @@ class Quote_Getter(Sql_Query,downloader):
   
   def add_quotes(self,amount):
     data = self.quote_ai(f"Get me {amount} motivational quotes")
-    #print(data)
-    data_list = list(map(lambda x: x[1],data.split("\n")))
-    print(data_list)
-    return self.insert_quotes_auto(data_list)
+    if  int(amount) > 1:
+      data_list = list(map(lambda x: x[1],data["content"].split("\n")))
+      print(data_list)
+      return self.insert_quotes_auto(data_list)
+    print([data['content']])
+    return self.insert_quotes_auto([f"{data['content']}"])
   
   
 

@@ -11,11 +11,15 @@ class Sql_Query():
 
   def insert_quotes_auto(self,data):
     cursor = self.mydb.cursor()
+    rc = 0
     for quo in data:
-      cursor.execute(f'INSERT INTO quotes (Quotes) VALUES ("{quo}");')
+      print(quo)
+      cursor.execute(f'INSERT INTO quotes (Quotes) VALUES ("""{quo}""");')
       self.update_Used("No",cursor.lastrowid)
+      rc += cursor.rowcount
+      print(rc)
     self.mydb.commit()
-    return f"{cursor.rowcount} records inserted."
+    return f"{rc} records inserted."
 
   def insert_quote(self,quote):
     cursor = self.mydb.cursor()

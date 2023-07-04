@@ -25,6 +25,9 @@ async def on_message(message):
         await message.channel.send(file=discord.File('quote.mp3'))
     else:
         data = Quote_Getter(message.content).answer_back()
-        await message.channel.send(data)
+        try:
+            await message.channel.send(data)
+        except:
+            await message.channel.send("Unknown Error Occured , Please Try Again")
 
 client.run(discord_key())
