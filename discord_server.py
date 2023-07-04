@@ -17,6 +17,14 @@ async def on_message(message):
     if message.author == client.user:
         return
     data = Quote_Getter(message.content).answer_back()
-    await message.channel.send(data)
+    if message.attachments != []:
+        data = Quote_Getter(message.content).answer_back()
+        await message.attachments[0].save("video_demo.mp4")
+        data = Quote_Getter(message.content).answer_back()
+    if data == "quote.mp3":
+        await message.channel.send(file=discord.File('quote.mp3'))
+    else:
+        data = Quote_Getter(message.content).answer_back()
+        await message.channel.send(data)
 
 client.run(discord_key())

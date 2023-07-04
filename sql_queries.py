@@ -15,7 +15,6 @@ class Sql_Query():
       cursor.execute(f'INSERT INTO quotes (Quotes) VALUES ("{quo}");')
       self.update_Used("No",cursor.lastrowid)
     self.mydb.commit()
-    print('Added')
     return f"{cursor.rowcount} records inserted."
 
   def insert_quote(self,quote):
@@ -48,7 +47,6 @@ class Sql_Query():
     cursor.execute("SELECT * FROM quotes")
     myresult = cursor.fetchall()
     quote_list = "\n".join(list(map(lambda x: x[0],myresult)))
-    print(quote_list)
     return quote_list
   
   def select_quote_byid(self,id):

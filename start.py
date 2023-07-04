@@ -52,15 +52,19 @@ class Video_Editor(Sql_Query):
         captions = captions.set_position(position)
         return captions
     
-    def quote_audio(self,tospeak):
+    def quote_audio(self,text):
 
         speech_key = key()
         service_region = "centralindia"
         speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
         speech_config.speech_synthesis_voice_name = "en-US-TonyNeural"
-        text = tospeak
+        text = f"""<speak version="1.0" xmlns="https://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+                    <voice name="en-US-TonyNeural" style="excited">
+                    {text}
+                    </voice>
+                    </speak>"""
         speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
-        result = speech_synthesizer.speak_text_async(text).get()
+        result = speech_synthesizer.speak_ssml_async(text).get()
         if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
             print("Speech synthesized for text [{}]".format(text))
         elif result.reason == speechsdk.ResultReason.Canceled:

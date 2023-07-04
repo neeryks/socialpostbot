@@ -2,8 +2,10 @@ from savedfile import pexels_api
 import requests
 import json
 import mysql.connector
+import azure.cognitiveservices.speech as speechsdk
+import savedfile
 
-class downloader:
+class downloader():
     def __init__(self):
         self.my_videodb = mysql.connector.connect(
         host="localhost",
@@ -73,5 +75,33 @@ class downloader:
         self.my_videodb.commit()
         print(cursor.rowcount, "record(s) deleted")
 
+    def quote_audio(self,text):
 
+        speech_key = savedfile.speech_key()
+        service_region = "centralindia"
+        speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+        speech_config.speech_synthesis_voice_name = "en-US-TonyNeural"
+        text = f"""<speak version="1.0" xmlns="https://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+                    <voice name="en-US-TonyNeural" style="excited">
+                    {text}
+                    </voice>
+                    </speak>"""
+        speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
+        result = speech_synthesizer.speak_ssml_async(text).get()
+        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+            print("Speech synthesized for text [{}]".format(text))
+        elif result.reason == speechsdk.ResultReason.Canceled:
+            cancellation_details = result.cancellation_details
+            print("Speech synthesis canceled: {}".format(cancellation_details.reason))
+            if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                print("Error details: {}".format(cancellation_details.error_details))
+        
+        with open("quote.mp3", "wb") as f:
+            f.write(result.audio_data)
+            f.close()
+        print("done")
+        return "quote.mp3"
 
+if __name__ == "__main__":
+    dow = downloader()
+    dow.quote_audio("Hello world")

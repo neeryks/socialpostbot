@@ -346,8 +346,13 @@ class Captioning(object) :
 if user_config_helper.cmd_option_exists("--help") :
     print(USAGE)
 else :
+    print("Step1")
     captioning = Captioning()
+    print("Step2")
     captioning.initialize()
+    print("Step3")
     speech_recognizer_data = captioning.speech_recognizer_from_user_config()
+    print("Step4")
     captioning.recognize_continuous(speech_recognizer=speech_recognizer_data["speech_recognizer"], format=speech_recognizer_data["audio_stream_format"], callback=speech_recognizer_data["pull_input_audio_stream_callback"], stream=speech_recognizer_data["pull_input_audio_stream"])
+    print("Step5")
     captioning.finish()

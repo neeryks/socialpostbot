@@ -1,7 +1,7 @@
 
 def function_list():
     list_of_functions = [
-        {
+    {
       "name": "select_all_quotes",
       "description": "get all the Quotes from the database",
       "parameters": {
@@ -15,21 +15,30 @@ def function_list():
       }
     },
     {
-      "name": "add_quotes",
-      "description": "Automatically insert or adds quotes into the database with the amount of quotes you want",
+      "name": "quote_audio",
+      "description": "converts the text that is given into audio",
       "parameters": {
         "type": "object",
         "properties": {
-          "Quotes": {
+          "text": {
             "type": "string",
-            "description": "String of quotes"
+            "description": "the text that needs to be converted to audio"
           },
+        }
+      },
+    },
+    {
+      "name": "add_quotes",
+      "description": "inserts a specific number of quotes into the database",
+      "parameters": {
+        "type": "object",
+        "properties": {
           "amount": {
             "type": "integer",
-            "description": "Amount of quotes you want to insert"
+            "description": "the number of quotes that need to be inserted"
           }
-        },
-        "required": ["amount"]
+        }
+
       }
     }
     ]
