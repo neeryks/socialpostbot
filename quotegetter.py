@@ -4,6 +4,7 @@ from function_list import function_list
 from regex import regex as re
 from sql_queries import Sql_Query
 from mediagetter import downloader
+from start import Video_Editor
 import json
 import dictfun
 
@@ -39,14 +40,15 @@ class Quote_Getter(Sql_Query,downloader):
   
   def query_sort(self):
     response=self.query_ai()
-    #print(response)
+    print(response)
     try:
       regex_arguments = re.sub(r"\t|\n|\r", '', response["function_call"]["arguments"])
       regex_arguments = json.loads(regex_arguments)
       
       function_call = response["function_call"]
       function_name = function_call["name"]
-      #print(regex_arguments)
+      print(regex_arguments)
+      vid_edit = Video_Editor()
       data = eval(dictfun.dict_fun(function_name))
       return data
 

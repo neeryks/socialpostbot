@@ -4,6 +4,10 @@ import json
 import mysql.connector
 import azure.cognitiveservices.speech as speechsdk
 import savedfile
+import PIL.Image
+from PIL import ImageDraw, ImageFont
+from moviepy.editor import TextClip, CompositeVideoClip
+
 
 class downloader():
     def __init__(self):
@@ -80,9 +84,9 @@ class downloader():
         speech_key = savedfile.speech_key()
         service_region = "centralindia"
         speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
-        speech_config.speech_synthesis_voice_name = "en-US-TonyNeural"
+        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural"
         text = f"""<speak version="1.0" xmlns="https://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-                    <voice name="en-US-TonyNeural" style="friendly">
+                    <voice name="en-US-DavisNeural" style="friendly">
                     {text}
                     </voice>
                     </speak>"""
@@ -101,6 +105,28 @@ class downloader():
             f.close()
         return "quote.mp3"
 
-if __name__ == "__main__":
-    dow = downloader()
-    dow.quote_audio("Hello world")
+    def textwarper(self,text,characters):
+        text_list = text.split(" ")
+        liapp = []
+        addedtext = ""
+        for tex in enumerate(text_list):
+            if len(addedtext) <= characters:
+                addedtext = addedtext +" "+ tex[1]
+            else:
+                liapp.append(addedtext)
+                addedtext = tex[1]
+        liapp.append(addedtext)   
+        return liapp               
+
+    def image_maker(self,text):
+
+        img = PIL.Image.open("backg.png")
+        dr = ImageDraw.Draw(img)
+        myFont = ImageFont.truetype('bar.ttf', 220)
+        list_of_text = self.textwarper(text, 35)
+        height_to_start = (len(list_of_text)/2)*-200
+        for te in list_of_text:
+            dr.text((img.width/2, img.height/2+height_to_start), f"{te}", fill=(255,255,255), font=myFont, anchor="mm", align="center")
+            height_to_start = height_to_start + 200
+        img.save("image.png")
+        return "image.png"

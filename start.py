@@ -19,6 +19,7 @@ class Video_Editor(Sql_Query):
         width, height = video_clip.size
         if width > height:
             video_clip = crop(video_clip, x_center=width/2, y_center=height/2, width = 360, height = 640)
+            video_clip = video_clip.resize((720,1280))
         else:
             video_clip = crop(video_clip, x_center=width/2, y_center=height/2, width = widthtobe, height = heighttobe)
         return video_clip
@@ -47,12 +48,12 @@ class Video_Editor(Sql_Query):
         return final_video.write_videofile("final_video.mp4")
 
     def caption(self,caption,font,color,position,video_file):
-        captions = TextClip(f"{caption}",method='caption',stroke_width= 4,font="Monerd-Solid.ttf", fontsize=font, color=f"{color}", size=video_file.size)
+        captions = TextClip(f"{caption}",method='caption',stroke_width= 4,font="bar.ttf", fontsize=font, color=f"{color}", size=video_file.size)
         captions = captions.set_duration(video_file.duration)
         captions = captions.set_position(position)
         return captions
     
-    def quote_audio(self,text):
+    def quote_audio_edit(self,text):
 
         speech_key = key()
         service_region = "centralindia"
@@ -77,6 +78,18 @@ class Video_Editor(Sql_Query):
             f.write(result.audio_data)
             f.close()
     
-merger = Video_Editor()
-merger.merging_clip()
+    def video_maker(self,text,idofvideo):
+        self.downloader.video_downloader(idofvideo)
+        video_clip = self.video_edit("video_demo.mp4",720,1280)
+        self.downloader.quote_audio(text)
+        final_audio = self.audio_edit("quote.mp3").volumex(1.0)
+        video_clip = video_clip.set_duration(final_audio.duration + 2)
+        video_clip = video_clip.set_audio(final_audio)
+        final_video = CompositeVideoClip([video_clip, self.caption(text,60,"yellow",('center','center'),video_clip)])
+        final_video.write_videofile("final_video.mp4")
+        return "final_video.mp4"
+    
+if __name__ == "__main__": 
+   vid = Video_Editor()
+   vid.video_maker("Hello World","16757506")
 

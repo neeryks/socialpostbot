@@ -23,6 +23,10 @@ async def on_message(message):
         data = Quote_Getter(message.content).answer_back()
     if data == "quote.mp3":
         await message.channel.send(file=discord.File('quote.mp3'))
+    if data == "image.png":
+        await message.channel.send(file=discord.File('image.png'))
+    if data == "final_video.mp4":
+        await message.channel.send(file=discord.File('final_video.mp4'))
     else:
         data = Quote_Getter(message.content).answer_back()
         try:
