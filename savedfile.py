@@ -1,5 +1,5 @@
 def openai_key():
-    return "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"
+    return "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"
 def pexels_api():
     return "ZWUIqJQX1RkuH9Mu4lP63OFdZWhIcNBliSLRHBsLnhz7rMkCyy71dpks"
 def graph_api():
