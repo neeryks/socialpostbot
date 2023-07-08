@@ -1,7 +1,7 @@
 
 import discord
-from quotegetter import Quote_Getter
-from savedfile import discord_api as discord_key
+from helper_functions.querysorter import Quote_Getter
+from discordapi import discord_api
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -19,14 +19,14 @@ async def on_message(message):
     data = Quote_Getter(message.content).answer_back()
     if message.attachments != []:
         data = Quote_Getter(message.content).answer_back()
-        await message.attachments[0].save("video_demo.mp4")
+        await message.attachments[0].save("static_media/video_demo.mp4")
         data = Quote_Getter(message.content).answer_back()
     if data == "quote.mp3":
-        await message.channel.send(file=discord.File('quote.mp3'))
+        await message.channel.send(file=discord.File('saved_media/quote.mp3'))
     if data == "image.png":
-        await message.channel.send(file=discord.File('image.png'))
+        await message.channel.send(file=discord.File('saved_media/image.png'))
     if data == "final_video.mp4":
-        await message.channel.send(file=discord.File('final_video.mp4'))
+        await message.channel.send(file=discord.File('saved_media/final_video.mp4'))
     else:
         data = Quote_Getter(message.content).answer_back()
         try:
@@ -34,4 +34,6 @@ async def on_message(message):
         except:
             await message.channel.send("Unknown Error Occured , Please Try Again")
 
-client.run(discord_key())
+if __name__ == "__main__":
+
+    client.run(discord_api())
