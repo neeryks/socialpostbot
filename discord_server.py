@@ -1,7 +1,7 @@
 
 import discord
 from quotegetter import Quote_Getter
-from helper_functions import discord_key
+from savedfile import discord_api as discord_key
 
 intents = discord.Intents.default()
 intents.message_content = True
