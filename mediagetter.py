@@ -118,15 +118,18 @@ class downloader():
         liapp.append(addedtext)   
         return liapp               
 
-    def image_maker(self,text):
-
-        img = PIL.Image.open("backg.png")
+    def image_maker(self,text,sizeofimage):
+        imgsize ={
+            "tall": ["tall.png",270,30,270],
+            "short": ["short.png",220,35,200]
+        }
+        img = PIL.Image.open(imgsize[sizeofimage][0])
         dr = ImageDraw.Draw(img)
-        myFont = ImageFont.truetype('bar.ttf', 220)
-        list_of_text = self.textwarper(text, 35)
+        myFont = ImageFont.truetype('bar.ttf', imgsize[sizeofimage][1])
+        list_of_text = self.textwarper(text, imgsize[sizeofimage][2])
         height_to_start = (len(list_of_text)/2)*-200
         for te in list_of_text:
             dr.text((img.width/2, img.height/2+height_to_start), f"{te}", fill=(255,255,255), font=myFont, anchor="mm", align="center")
-            height_to_start = height_to_start + 200
+            height_to_start = height_to_start + imgsize[sizeofimage][3]
         img.save("image.png")
         return "image.png"

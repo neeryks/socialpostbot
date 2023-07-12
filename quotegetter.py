@@ -9,7 +9,7 @@ import json
 import dictfun
 
 
-class Quote_Getter(Sql_Query,downloader):
+class Quote_Getter(Video_Editor,downloader):
   def __init__(self,query):
     super().__init__()
     self.query = query
@@ -48,7 +48,6 @@ class Quote_Getter(Sql_Query,downloader):
       function_call = response["function_call"]
       function_name = function_call["name"]
       print(regex_arguments)
-      vid_edit = Video_Editor()
       data = eval(dictfun.dict_fun(function_name))
       return data
 

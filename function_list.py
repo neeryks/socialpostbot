@@ -51,7 +51,11 @@ def function_list():
             "type": "string",
             "description": "the quote that needs to be inserted into the image"
           },
-        }
+          "sizeofimage": {
+            "type": "string",
+            "description": "the size of the image that needs to be created ,it will be either 'tall' or 'short' if nother is given it will be short"
+          }
+        },
       },
     },
     {

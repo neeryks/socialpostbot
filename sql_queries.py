@@ -1,13 +1,14 @@
 import mysql.connector
 
 class Sql_Query():
-
+  
   def __init__(self):
     self.mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     password="H.no194/3A",
     database="quote_db")
+
 
   def insert_quotes_auto(self,data):
     cursor = self.mydb.cursor()
