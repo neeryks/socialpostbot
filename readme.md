@@ -24,7 +24,7 @@
 
    ```bash
    git clone https://github.com/yourusername/socialpost-bot.git
-...python
+```python
 # savedfile.py
 
 def discord_api():
