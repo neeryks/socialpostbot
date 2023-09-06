@@ -38,3 +38,9 @@ def graph_api():
     
 def openai_key():
     return "openai_key"
+```
+### How to Start
+```bash
+python start.py
+```
+
